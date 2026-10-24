@@ -1,9 +1,11 @@
 package com.universidad.sistema.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "carreras")
 public class Carrera {
@@ -14,10 +16,16 @@ public class Carrera {
 
     private String nombre;
 
-    private String facultad;
-
     @Column(length = 1000)
     private String descripcion;
 
-    private String estado; // BORRADOR o PUBLICADA
+    // Una carrera pertenece a una division
+    @ManyToOne
+    @JoinColumn(name = "division_id")
+    private Division division;
+
+    // Campos del sistema anterior
+    private String facultad;
+    private String estado;
+
 }
