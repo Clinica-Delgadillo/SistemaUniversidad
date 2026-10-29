@@ -2,7 +2,7 @@ package com.universidad.sistema.controller;
 
 import com.universidad.sistema.dto.DivisionRequest;
 import com.universidad.sistema.dto.DivisionResponse;
-import com.universidad.sistema.service .DivisionService;
+import com.universidad.sistema.service.DivisionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

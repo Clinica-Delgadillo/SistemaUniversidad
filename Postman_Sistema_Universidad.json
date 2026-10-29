@@ -1,0 +1,244 @@
+{
+  "info": {
+    "name": "Sistema Universidad — Pruebas por historia de usuario",
+    "_postman_id": "a1b2c3d4-e5f6-4a1b-8c2d-000000000001",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Prerrequisito — Divisiones (rol administrador)",
+      "item": [
+        {
+          "name": "Crear división Ingeniería",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/divisiones", "host": ["localhost"], "port": "8082", "path": ["api", "divisiones"] },
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Ingeniería\"\n}" },
+            "description": "Necesaria para poder crear carreras (HU01.1)."
+          }
+        },
+        {
+          "name": "Crear división Ciencias",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/divisiones", "host": ["localhost"], "port": "8082", "path": ["api", "divisiones"] },
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Ciencias\"\n}" }
+          }
+        },
+        {
+          "name": "Listar divisiones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/divisiones", "host": ["localhost"], "port": "8082", "path": ["api", "divisiones"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "HU01.1 — Registrar carrera (administrador)",
+      "item": [
+        {
+          "name": "Crear carrera",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras", "host": ["localhost"], "port": "8082", "path": ["api", "carreras"] },
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Computación\",\n  \"descripcion\": \"Licenciatura en Computación\",\n  \"division\": { \"id\": 1 }\n}" },
+            "description": "Prueba: Crear carrera. Esperado: 201, estado BORRADOR."
+          },
+          "response": []
+        },
+        {
+          "name": "Crear carrera (adicional: segunda carrera)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras", "host": ["localhost"], "port": "8082", "path": ["api", "carreras"] },
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Matemáticas\",\n  \"descripcion\": \"Licenciatura en Matemáticas\",\n  \"division\": { \"id\": 2 }\n}" },
+            "description": "Adicional: segunda carrera para dejar datos publicados en HU02.1. Esperado: 201."
+          }
+        },
+        {
+          "name": "Crear carrera con división inexistente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras", "host": ["localhost"], "port": "8082", "path": ["api", "carreras"] },
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Fantasma\",\n  \"descripcion\": \"Carrera sin división válida\",\n  \"division\": { \"id\": 999 }\n}" },
+            "description": "Regla de negocio: la división debe existir. Esperado: 409."
+          }
+        }
+      ]
+    },
+    {
+      "name": "HU01.2 — Consultar carreras (administrador)",
+      "item": [
+        {
+          "name": "Lista vacía (BD sin carreras)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras", "host": ["localhost"], "port": "8082", "path": ["api", "carreras"] },
+            "description": "Prueba: Lista vacía. Ejecutar primero con la app recién iniciada (H2 en memoria). Esperado: 200 con [] ."
+          }
+        },
+        {
+          "name": "Listar carreras",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras", "host": ["localhost"], "port": "8082", "path": ["api", "carreras"] },
+            "description": "Prueba: Listar. Esperado: 200 con la lista de carreras (borradores y publicadas)."
+          }
+        },
+        {
+          "name": "Filtrar por estado BORRADOR",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras?estado=BORRADOR", "host": ["localhost"], "port": "8082", "path": ["api", "carreras"], "query": [{ "key": "estado", "value": "BORRADOR" }] },
+            "description": "Prueba: Filtrar por estado. Esperado: 200 solo carreras BORRADOR."
+          }
+        },
+        {
+          "name": "Obtener carrera por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras/1", "host": ["localhost"], "port": "8082", "path": ["api", "carreras", "1"] },
+            "description": "Prueba: Obtener por ID. Esperado: 200."
+          }
+        }
+      ]
+    },
+    {
+      "name": "HU01.3 — Editar carrera (administrador)",
+      "item": [
+        {
+          "name": "Actualizar carrera",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras/1", "host": ["localhost"], "port": "8082", "path": ["api", "carreras", "1"] },
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Computación Avanzada\",\n  \"descripcion\": \"Licenciatura en Computación Avanzada\",\n  \"division\": { \"id\": 1 }\n}" },
+            "description": "Prueba: Actualizar. Esperado: 200 con los cambios."
+          }
+        },
+        {
+          "name": "Actualizar carrera inexistente",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras/999", "host": ["localhost"], "port": "8082", "path": ["api", "carreras", "999"] },
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"No existe\",\n  \"descripcion\": \"x\",\n  \"division\": { \"id\": 1 }\n}" },
+            "description": "Prueba: Actualizar inexistente. Esperado: 404."
+          }
+        }
+      ]
+    },
+    {
+      "name": "HU01.4 — Publicar carrera (administrador)",
+      "item": [
+        {
+          "name": "Publicar carrera",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras/1/publicar", "host": ["localhost"], "port": "8082", "path": ["api", "carreras", "1", "publicar"] },
+            "description": "Prueba: Publicar (BORRADOR → PUBLICADA). Esperado: 200, estado PUBLICADA."
+          }
+        },
+        {
+          "name": "Publicar carrera (adicional: segunda carrera)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras/2/publicar", "host": ["localhost"], "port": "8082", "path": ["api", "carreras", "2", "publicar"] },
+            "description": "Adicional: publica la carrera 2 para que HU02.1 tenga resultados. Esperado: 200."
+          }
+        },
+        {
+          "name": "Publicar carrera inexistente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras/999/publicar", "host": ["localhost"], "port": "8082", "path": ["api", "carreras", "999", "publicar"] },
+            "description": "Prueba: Publicar inexistente. Esperado: 404."
+          }
+        }
+      ]
+    },
+    {
+      "name": "HU01.5 — Eliminar carrera (administrador)",
+      "item": [
+        {
+          "name": "Eliminar carrera",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras/1", "host": ["localhost"], "port": "8082", "path": ["api", "carreras", "1"] },
+            "description": "Prueba: Eliminar. Esperado: 204."
+          }
+        },
+        {
+          "name": "Verificar eliminada (GET después de DELETE)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras/1", "host": ["localhost"], "port": "8082", "path": ["api", "carreras", "1"] },
+            "description": "Prueba: Verificar eliminada. Esperado: 404."
+          }
+        },
+        {
+          "name": "Eliminar carrera inexistente",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras/999", "host": ["localhost"], "port": "8082", "path": ["api", "carreras", "999"] },
+            "description": "Prueba: Eliminar inexistente. Esperado: 404."
+          }
+        }
+      ]
+    },
+    {
+      "name": "HU02.1 — Ver carreras publicadas (usuario general)",
+      "item": [
+        {
+          "name": "Filtrar carreras PUBLICADA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras?estado=PUBLICADA", "host": ["localhost"], "port": "8082", "path": ["api", "carreras"], "query": [{ "key": "estado", "value": "PUBLICADA" }] },
+            "description": "Prueba: Filtrar PUBLICADA. Esperado: 200 solo carreras publicadas."
+          }
+        }
+      ]
+    },
+    {
+      "name": "HU02.2 — Ver detalle de una carrera (usuario general)",
+      "item": [
+        {
+          "name": "Obtener detalle por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras/2", "host": ["localhost"], "port": "8082", "path": ["api", "carreras", "2"] },
+            "description": "Prueba: Obtener por ID. Esperado: 200 con el detalle (nombre, descripción, división, estado)."
+          }
+        },
+        {
+          "name": "Obtener carrera inexistente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:8082/api/carreras/999", "host": ["localhost"], "port": "8082", "path": ["api", "carreras", "999"] },
+            "description": "Prueba: Obtener inexistente. Esperado: 404."
+          }
+        }
+      ]
+    }
+  ]
+}
