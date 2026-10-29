@@ -42,22 +42,42 @@ public class DivisionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.crearDivision(datos));
     }
 
+    // Atiende solicitudes HTTP PUT en la ruta /divisiones/{id}.
     @PutMapping("/{id}")
-    public ResponseEntity<DivisionResponse> actualizar(@PathVariable Long id,
-                                                        @RequestBody DivisionRequest datos) {
+    public ResponseEntity<DivisionResponse> actualizar(
+            @PathVariable Long id,
+            @RequestBody DivisionRequest datos) {
+
+        // Busca la división por su ID y actualiza sus datos.
         return service.actualizarDivision(id, datos)
+
+                // Si la división existe y se actualizó correctamente,
+                // devuelve HTTP 200 OK junto con la división actualizada.
                 .map(ResponseEntity::ok)
+
+                // Si no existe una división con ese ID,
+                // devuelve HTTP 404 Not Found.
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Atiende solicitudes HTTP DELETE en la ruta /divisiones/{id}.
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+
+        // Intenta eliminar la división mediante el servicio.
         if (!service.eliminarDivision(id)) {
+
+            // Si la división no existe, devuelve HTTP 404 Not Found.
             return ResponseEntity.notFound().build();
         }
+
+        // Si la eliminación fue correcta, devuelve HTTP 204 No Content,
+        // indicando que la operación terminó correctamente y no hay contenido que
+        // devolver.
         return ResponseEntity.noContent().build();
     }
 
+    
     @ExceptionHandler(DivisionService.DivisionConCarrerasException.class)
     public ResponseEntity<Map<String, String>> divisionConCarreras(
             DivisionService.DivisionConCarrerasException ex) {
