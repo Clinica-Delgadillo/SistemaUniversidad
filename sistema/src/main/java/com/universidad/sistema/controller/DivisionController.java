@@ -24,19 +24,19 @@ public class DivisionController {
     public DivisionController(DivisionService service) {
         this.service = service;
     }
-
+// Obtiene la lista de divisiones registradas y devuelve sus datos.
     @GetMapping
     public List<DivisionResponse> listar() {
         return service.listarDivisiones();
     }
-
+// Busca una división por su ID y devuelve sus datos si existe.
     @GetMapping("/{id}")
     public ResponseEntity<DivisionResponse> obtener(@PathVariable Long id) {
         return service.obtenerDivision(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+// Registra una nueva división y devuelve la información creada.
     @PostMapping
     public ResponseEntity<DivisionResponse> crear(@RequestBody DivisionRequest datos) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.crearDivision(datos));
